@@ -55,7 +55,7 @@ public class TestRegister {
     }
 
     @Test
-    public void testLoginSuccess() throws InterruptedException {
+    public void testRegisterSuccess() throws InterruptedException {
         txtFullName.sendKeys("Nguyễn Huy Hùng");
         txtUsername.sendKeys("hungnh");
         txtPassword.sendKeys("huyhung99");
@@ -76,6 +76,13 @@ public class TestRegister {
         String actualTitle = driver.getTitle();
         Assert.assertEquals(expectedTitle, actualTitle);
     }
+
+
+    //
+    //Test de trong cac truong
+    //
+    //
+
 
     @Test
     public void testFullnameEmpty() throws InterruptedException {
@@ -114,6 +121,7 @@ public class TestRegister {
 
         Thread.sleep(1000);
 
+        Assert.assertTrue(txtUsername.isDisplayed());
     }
 
     @Test
@@ -142,6 +150,7 @@ public class TestRegister {
         });
         alert.accept();
 
+        Assert.assertTrue(txtPassword.isDisplayed());
     }
 
     @Test
@@ -169,6 +178,7 @@ public class TestRegister {
             }
         });
         alert.accept();
+        Assert.assertTrue(txtConfirmPassword.isDisplayed());
     }
 
     @Test
@@ -187,6 +197,8 @@ public class TestRegister {
         btnRegister.click();
 
         Thread.sleep(1000);
+
+        Assert.assertTrue(txtDob.isDisplayed());
 
     }
 
@@ -207,6 +219,7 @@ public class TestRegister {
 
         Thread.sleep(1000);
 
+        Assert.assertTrue(txtCINumber.isDisplayed());
     }
 
     @Test
@@ -226,6 +239,7 @@ public class TestRegister {
 
         Thread.sleep(1000);
 
+        Assert.assertTrue(txtEmail.isDisplayed());
     }
 
     @Test
@@ -245,6 +259,7 @@ public class TestRegister {
 
         Thread.sleep(1000);
 
+        Assert.assertTrue(txtPhone.isDisplayed());
     }
 
     @Test
@@ -264,6 +279,7 @@ public class TestRegister {
 
         Thread.sleep(1000);
 
+        Assert.assertTrue(txtPermanentAddress.isDisplayed());
     }
 
     @Test
@@ -283,6 +299,7 @@ public class TestRegister {
 
         Thread.sleep(1000);
 
+        Assert.assertTrue(txtHometown.isDisplayed());
     }
 
     @Test
@@ -302,10 +319,41 @@ public class TestRegister {
 
         Thread.sleep(1000);
 
+        Assert.assertTrue(txtBalance.isDisplayed());
+    }
+
+    //
+    //Test sai dinh dang cac truong
+    //
+    //
+
+    //method checkMessage from alert
+    public void checkAlert(String expectedMessage){
+        WebDriverWait wait = new WebDriverWait(driver, 5);
+        Alert alert = null;
+        try{
+            alert = wait.until(new ExpectedCondition<Alert>() {
+                @NullableDecl
+                @Override
+                public Alert apply(@NullableDecl WebDriver webDriver) {
+                    try{
+                        return driver.switchTo().alert();
+                    }
+                    catch(NoAlertPresentException e){
+                        return null;
+                    }
+                }
+            });
+        } catch(WebDriverException ignored){}
+        if(alert!=null){
+            Assert.assertEquals(expectedMessage, alert.getText());
+            alert.accept();
+        }
+        else Assert.assertNotNull(null);
     }
 
     @Test
-    public void testUsernameFormat() throws InterruptedException {
+    public void testUsernameFormat() {
         txtFullName.sendKeys("Nguyễn Văn Chung");
         txtUsername.sendKeys("nguyễnchung");
         txtPassword.sendKeys("jinylove");
@@ -320,12 +368,12 @@ public class TestRegister {
 
         btnRegister.click();
 
-        Thread.sleep(1000);
-
+        String expectedMessage = "Username nhập sai định dạng.";
+        checkAlert(expectedMessage);
     }
 
     @Test
-    public void testPasswordFormat() throws InterruptedException {
+    public void testPasswordFormat() {
         txtFullName.sendKeys("Nguyễn Văn Chung");
         txtUsername.sendKeys("jinylove");
         txtPassword.sendKeys("321acd");
@@ -340,12 +388,13 @@ public class TestRegister {
 
         btnRegister.click();
 
-        Thread.sleep(1000);
-
+        String expectedMessage = "Password nhập sai định dạng.";
+        checkAlert(expectedMessage);
     }
 
     @Test
     public void testConfirmPasswordFormat() {
+        //Kiem tra password nhap lai co khop voi password da nhap o tren ko
         txtFullName.sendKeys("Nguyễn Văn Chung");
         txtUsername.sendKeys("jinylove");
         txtPassword.sendKeys("jinylove123");
@@ -360,21 +409,12 @@ public class TestRegister {
 
         btnRegister.click();
 
-        WebDriverWait wait = new WebDriverWait(driver, 5);
-
-        Alert alert = wait.until(new ExpectedCondition<Alert>() {
-            @NullableDecl
-            @Override
-            public Alert apply(@NullableDecl WebDriver webDriver) {
-                return driver.switchTo().alert();
-            }
-        });
-        alert.accept();
-
+        String expectedMessage = "password and confirm password are not matching";
+        checkAlert(expectedMessage);
     }
 
     @Test
-    public void testDateOfBirthFormat() throws InterruptedException {
+    public void testDateOfBirthFormat() {
         txtFullName.sendKeys("Nguyễn Văn Chung");
         txtUsername.sendKeys("jinylove");
         txtPassword.sendKeys("jinylove");
@@ -389,12 +429,12 @@ public class TestRegister {
 
         btnRegister.click();
 
-        Thread.sleep(1000);
-
+        String expectedMessage = "Date of birth nhập sai định dạng.";
+        checkAlert(expectedMessage);
     }
 
     @Test
-    public void testCINumberFormat() throws InterruptedException {
+    public void testCINumberFormat() {
         txtFullName.sendKeys("Nguyễn Văn Chung");
         txtUsername.sendKeys("jinylove");
         txtPassword.sendKeys("jinylove");
@@ -409,12 +449,13 @@ public class TestRegister {
 
         btnRegister.click();
 
-        Thread.sleep(1000);
+        String expectedMessage = "Citizen identification number nhập sai định dạng.";
+        checkAlert(expectedMessage);
 
     }
 
     @Test
-    public void testEmailFormat() throws InterruptedException {
+    public void testEmailFormat() {
         txtFullName.sendKeys("Nguyễn Văn Chung");
         txtUsername.sendKeys("jinylove");
         txtPassword.sendKeys("jinylove");
@@ -429,12 +470,11 @@ public class TestRegister {
 
         btnRegister.click();
 
-        Thread.sleep(1000);
-
+        Assert.assertTrue(txtEmail.isDisplayed());
     }
 
     @Test
-    public void testPhoneFormat() throws InterruptedException {
+    public void testPhoneFormat() {
         txtFullName.sendKeys("Nguyễn Văn Chung");
         txtUsername.sendKeys("jinylove");
         txtPassword.sendKeys("jinylove");
@@ -449,12 +489,12 @@ public class TestRegister {
 
         btnRegister.click();
 
-        Thread.sleep(1000);
-
+        String expectedMessage = "Phone nhập sai định dạng.";
+        checkAlert(expectedMessage);
     }
 
     @Test
-    public void testBalanceFormat() throws InterruptedException {
+    public void testBalanceFormat() {
         txtFullName.sendKeys("Nguyễn Văn Chung");
         txtUsername.sendKeys("jinylove");
         txtPassword.sendKeys("jinylove");
@@ -469,12 +509,18 @@ public class TestRegister {
 
         btnRegister.click();
 
-        Thread.sleep(1000);
-
+        String expectedMessage = "Balance nhập sai định dạng.";
+        checkAlert(expectedMessage);
     }
 
+
+    //
+    //Test sai logic
+    //
+    //
+
     @Test
-    public void testLogic1() throws InterruptedException {
+    public void testLogic1() {
         //Đang ki trung username
         txtFullName.sendKeys("Nguyễn Văn Chung");
         txtUsername.sendKeys("congtm");
@@ -490,12 +536,12 @@ public class TestRegister {
 
         btnRegister.click();
 
-        Thread.sleep(1000);
-
+        String expectedMessage = "Đăng kí thất bại. Username đã tồn tại.";
+        checkAlert(expectedMessage);
     }
 
     @Test
-    public void testLogic2() throws InterruptedException {
+    public void testLogic2() {
         //Dang ki trung Account number
         txtFullName.sendKeys("Nguyễn Văn Chung");
         txtUsername.sendKeys("jinylove");
@@ -511,12 +557,12 @@ public class TestRegister {
 
         btnRegister.click();
 
-        Thread.sleep(1000);
-
+        String expectedMessage = "Đăng kí thất bại. Number account đã tồn tại.";
+        checkAlert(expectedMessage);
     }
 
     @Test
-    public void testLogic3() throws InterruptedException {
+    public void testLogic3() {
         //Date of birth lon hon ngay hien tai
         txtFullName.sendKeys("Nguyễn Văn Chung");
         txtUsername.sendKeys("jinylove");
@@ -532,12 +578,12 @@ public class TestRegister {
 
         btnRegister.click();
 
-        Thread.sleep(1000);
-
+        String expectedMessage = "Ngày sinh không được phép lớn hơn ngày hiện tại.";
+        checkAlert(expectedMessage);
     }
 
     @Test
-    public void testLogic4() throws InterruptedException {
+    public void testLogic4() {
         //Khach hang < 15 tuoi
         txtFullName.sendKeys("Nguyễn Văn Chung");
         txtUsername.sendKeys("jinylove");
@@ -553,12 +599,12 @@ public class TestRegister {
 
         btnRegister.click();
 
-        Thread.sleep(1000);
-
+        String expectedMessage = "Khách hàng chưa đủ 15 tuổi để đăng kí tài khoản.";
+        checkAlert(expectedMessage);
     }
 
     @Test
-    public void testLogic5() throws InterruptedException {
+    public void testLogic5() {
         //Balance < 50000
         txtFullName.sendKeys("Nguyễn Văn Chung");
         txtUsername.sendKeys("jinylove");
@@ -574,7 +620,7 @@ public class TestRegister {
 
         btnRegister.click();
 
-        Thread.sleep(1000);
-
+        String expectedMessage = "Số dư phải >= 50000";
+        checkAlert(expectedMessage);
     }
 }
